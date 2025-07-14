@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: bot2-condominio
-    env: python
-    plan: free
-    region: oregon  # ou altere para a região desejada
-    buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
-    autoDeploy: true
