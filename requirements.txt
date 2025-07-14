@@ -1,9 +1,0 @@
-streamlit
-langchain
-langchain-community
-chromadb
-transformers[torch]==4.40.1
-pypdf
-sentence-transformers
-torch
-pillow
