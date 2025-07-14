@@ -2,9 +2,9 @@ streamlit
 langchain
 langchain-community
 chromadb
-transformers[torch]==4.40.1
+transformers==4.29.2
+sentence-transformers==2.2.2
 pypdf
-sentence-transformers
 torch
 pillow
 pydantic
