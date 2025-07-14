@@ -8,3 +8,5 @@ pypdf
 torch
 pillow
 pydantic
+tokenizers==0.13.3
+
