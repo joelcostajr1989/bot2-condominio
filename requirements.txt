@@ -2,6 +2,8 @@ streamlit
 langchain
 langchain-community
 chromadb
-sentence-transformers
+transformers[torch]==4.40.1
 pypdf
+sentence-transformers
 torch
+pillow
