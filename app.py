@@ -7,10 +7,6 @@ from langchain.chains import RetrievalQA
 from langchain_community.llms import HuggingFacePipeline
 from transformers import pipeline
 
-# LLM local (leve)
-pipe = pipeline("text-generation", model="sshleifer/tiny-gpt2", max_new_tokens=100)
-llm = HuggingFacePipeline(pipeline=pipe)
-
 def carregar_pdf(caminho_pdf):
     loader = PyPDFLoader(caminho_pdf)
     return loader.load_and_split()
@@ -27,12 +23,22 @@ uploaded_file = st.file_uploader("Envie o PDF da Ata ou Manual", type="pdf")
 query = st.text_input("Faça uma pergunta sobre o documento")
 
 if uploaded_file and query:
-    caminho_temp = "temp.pdf"
+    caminho_temp = os.path.join("temp.pdf")
     with open(caminho_temp, "wb") as f:
         f.write(uploaded_file.read())
 
     docs = carregar_pdf(caminho_temp)
     db = criar_ou_carregar_vectorstore(docs, persist_directory="db")
+
+    # Criando o pipeline do modelo leve para LLM
+    hf_pipeline = pipeline(
+        "text-generation",
+        model="sshleifer/tiny-gpt2",
+        max_length=100,
+        do_sample=False
+    )
+    llm = HuggingFacePipeline(pipeline=hf_pipeline)
+
     qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
     resultado = qa_chain.run(query)
     st.write("Resposta:", resultado)
