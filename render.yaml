@@ -1,4 +1,5 @@
 services:
+    python-3.10.13
   - type: web
     name: bot2-condominio
     env: python
