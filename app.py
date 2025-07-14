@@ -4,6 +4,12 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
+from langchain_community.llms import HuggingFacePipeline
+from transformers import pipeline
+
+# LLM local (leve)
+pipe = pipeline("text-generation", model="sshleifer/tiny-gpt2", max_new_tokens=100)
+llm = HuggingFacePipeline(pipeline=pipe)
 
 def carregar_pdf(caminho_pdf):
     loader = PyPDFLoader(caminho_pdf)
@@ -21,12 +27,12 @@ uploaded_file = st.file_uploader("Envie o PDF da Ata ou Manual", type="pdf")
 query = st.text_input("Faça uma pergunta sobre o documento")
 
 if uploaded_file and query:
-    caminho_temp = os.path.join("temp.pdf")
+    caminho_temp = "temp.pdf"
     with open(caminho_temp, "wb") as f:
         f.write(uploaded_file.read())
 
     docs = carregar_pdf(caminho_temp)
     db = criar_ou_carregar_vectorstore(docs, persist_directory="db")
-    qa_chain = RetrievalQA.from_chain_type(llm=None, retriever=db.as_retriever())
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=db.as_retriever())
     resultado = qa_chain.run(query)
     st.write("Resposta:", resultado)
